@@ -5,7 +5,7 @@
     defaults: {
       name: { value: "" },
       apiMode: { value: null, required: true },
-      serialPort: { value: "", type: "xbee-config" }
+      xBee: { value: "", type: "xbee-config" }
     },
     inputs: 1,
     outputs: 0,
@@ -39,7 +39,7 @@
     defaults: {
       name: { value: "" },
       apiMode: { value: null, required: true },
-      serialPort: { value: "", type: "xbee-config" }
+      xBee: { value: "", type: "xbee-config" }
     },
     inputs: 0,
     outputs: 1,
@@ -98,11 +98,11 @@
     <input type="text" id="node-input-name" placeholder="Name">
   </div>
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-cog"></i> XBee Connection</label>
-    <input type="text" id="node-input-serialPort" placeholder="Serial Port">
+    <label for="node-input-xBee"><i class="fa fa-cog"></i> XBee</label>
+    <input type="text" id="node-input-xBee" placeholder="Serial Port">
   </div>
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-code"></i> API Mode</label>
+    <label for="node-input-apiMode"><i class="fa fa-code"></i> API Mode</label>
     <select id="node-input-apiMode">
       <option value=""></option>
     </select>
@@ -119,11 +119,11 @@
     <input type="text" id="node-input-name" placeholder="Name">
   </div>
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-cog"></i> XBee Connection</label>
-    <input type="text" id="node-input-serialPort" placeholder="Serial Port">
+    <label for="node-input-xBee"><i class="fa fa-cog"></i> XBee</label>
+    <input type="text" id="node-input-xBee" placeholder="Serial Port">
   </div>
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-code"></i> API Mode</label>
+    <label for="node-input-apiMode"><i class="fa fa-code"></i> API Mode</label>
     <select id="node-input-apiMode">
       <option value=""></option>
     </select>
