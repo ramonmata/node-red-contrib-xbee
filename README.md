@@ -6,9 +6,9 @@
 **Tasks lists**
 - [x] Init Git Repository
 - [x] Basic modules functionality and Look and Feel
-- [-] Serial / XBee api service (50%) receiving data is functional
+- [x] Serial / XBee api service (50%) receiving data is functional
 - [ ] XBee TX module
-- [-] XBee RX module (it is functional, pending optimizations)
+- [x] XBee RX module (it is functional, pending optimizations)
 - [ ] Testing ...
 
 
