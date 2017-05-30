@@ -8,12 +8,12 @@
     },
     inputs: 1,
     outputs: 0,
-    icon: "xbee.png",
+    icon: 'xbee.png',
     align: 'right',
     label: function () {
-      return this.name || "XBee TX";
+      return this.name || 'XBee TX';
     },
-    paletteLabel: "XBee TX"
+    paletteLabel: 'XBee TX'
   });
 
   RED.nodes.registerType('xbee-rx', {
@@ -21,51 +21,78 @@
     color: '#3FADB5',
     defaults: {
       name: { value: '' },
-      xBee: { value: '', type: "xbee-config" }
+      xBee: { value: '', type: 'xbee-config' }
     },
     inputs: 0,
     outputs: 1,
-    icon: "xbee.png",
+    icon: 'xbee.png',
     label: function () {
-      return this.name || "XBee RX";
+      return this.name || 'XBee RX';
     },
-    paletteLabel: "XBee RX"
+    paletteLabel: 'XBee RX'
   });
 
   RED.nodes.registerType('xbee-config', {
     category: 'config',
     defaults: {
+      apiMode: { value: '1', required: true },
+      rawFrames: { value: false, required: true },
+      convertAdc: { value: true, required: true },
+      vrefAdc: { value: 1200, required: true },
       serialPort: { value: '', required: true },
+      lock: { value: true, required: true },
       baudRate: { value: 9600, required: true },
-      apiMode: { value: '1', required: true }
+      dataBits: { value: 8, required: true },
+      stopBits: { value: 1, required: true },
+      parity: { value: 'none', required: true },
+      bufferSize: { value: 65536, required: true },
+      rtscts: { value: false, required: true },
+      xon: { value: false, required: true },
+      xoff: { value: false, required: true },
+      xany: { value: false, required: true },
+      vmin: { value: '1', required: true },
+      vtime: { value: '0', required: true }
     },
     label: function () {
-      return 'XBee[api:'+this.apiMode+']@' + this.serialPort + ":" + this.baudRate;
+      return '('+this.id+') XBee[api:' + this.apiMode + ']@' + this.serialPort + ':' + this.baudRate;
     },
-    oneditprepare: function(){
+    oneditprepare: function () {
       var node = this;
+      var buildOptionsHtml = function (propertyName, actualValue, options) {
+        for (i = 0; i < options.length; i++) {
+          $('#node-config-input-' + propertyName).append(
+            '<option value=' + options[i] +
+            ((actualValue == options[i]) ? ' selected>' : '>') +
+            options[i] +
+            '</option>');
+        }
+      }
       var baudRates = [
-        9600,19200,38400,57600,115200,230400,460800,921600
+        50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800,
+        2400, 4800, 9600, 19200, 38400, 57600, 115200,
+        230400, 460800, 921600
       ];
       var apiModes = [
-        {name:'API 1', value: '1' },
-        {name:'API 2 (escaped characters)', value: '2' }
+        { name: 'API 1', value: '1' },
+        { name: 'API 2 (escaped characters)', value: '2' }
       ];
-      for (i=0; i<baudRates.length;i++){
-        $('#node-config-input-baudRate').append(
-          '<option value='+baudRates[i]+
-            ((node.baudRate == baudRates[i]) ? ' selected>' : '>') +
-            baudRates[i] +
-            '</option>');
-      }
-      for (i=0; i<apiModes.length;i++){
+      var dataBits = [8, 7, 6, 5];
+      var stopBits = [1, 2];
+      var parity = ['none', 'even', 'mark', 'odd', 'space'];
+
+      buildOptionsHtml('baudRate', node.baudRate, baudRates);
+      buildOptionsHtml('dataBits', node.dataBits, dataBits);
+      buildOptionsHtml('stopBits', node.stopBits, stopBits);
+      buildOptionsHtml('parity', node.parity, parity);
+
+      for (i = 0; i < apiModes.length; i++) {
         $('#node-config-input-apiMode')
           .append(
-            '<option value=' +
-            apiModes[i].value +
-            ((node.apiMode == apiModes[i].value) ? ' selected>' : '>') +
-            apiModes[i].name +
-            '</option>');
+          '<option value=' +
+          apiModes[i].value +
+          ((node.apiMode == apiModes[i].value) ? ' selected>' : '>') +
+          apiModes[i].name +
+          '</option>');
       }
     }
   });
@@ -103,17 +130,93 @@
 </script>
 
 <script type="text/x-red" data-template-name="xbee-config">
-    <div class="form-row">
-        <label for="node-config-input-serialPort"><i class="fa fa-usb"></i> Serial Port</label>
-        <input type="text" id="node-config-input-serialPort">
-    </div>
-    <div class="form-row">
-        <label for="node-config-input-baudRate"><i class="fa fa-filter"></i> Baud Rate</label>
-        <select id="node-config-input-baudRate">
-      </select>
-    </div>
-    <div class="form-row">
+  <div class="form-row">
+    <h5>XBee</h5>
     <label for="node-config-input-apiMode"><i class="fa fa-code"></i> API Mode</label>
     <select id="node-config-input-apiMode"></select>
   </div>
+  <div class="form-row">
+    <label>&nbsp;</label>
+    <input type="checkbox" id="node-config-input-rawFrames" style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-config-input-rawFrames"> RAW Frames</label>
+  </div>
+  <div class="form-row">
+    <label>&nbsp;</label>
+    <input type="checkbox" id="node-config-input-convertAdc" style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-config-input-convertAdc"> Convert ADC</label>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-vrefAdc"> Value REF ADC</label>
+    <input type="number" id="node-config-input-vrefAdc" style="width:auto;">
+  </div>
+  <div class="form-row">
+    <h5>Serial Port</h5>
+    <label for="node-config-input-serialPort"><i class="fa fa-usb"></i> Serial Port</label>
+    <input type="text" id="node-config-input-serialPort" style="width:auto;">
+  </div>
+  <div class="form-row">
+    <label>&nbsp;</label>
+    <input type="checkbox" id="node-config-input-lock" style="display: inline-block; width: auto; vertical-align: top;">
+    <label for="node-config-input-lock" style="width: 70%;">Lock port (<em>not currently supported on windows</em>)</label>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-baudRate"><i class="fa fa-caret-down"></i> Baud Rate</label>
+    <select id="node-config-input-baudRate">
+      </select>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-dataBits"><i class="fa fa-caret-down"></i> Data Bits</label>
+    <select id="node-config-input-dataBits">
+      </select>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-stopBits"><i class="fa fa-caret-down"></i> Stop Bits</label>
+    <select id="node-config-input-stopBits">
+      </select>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-parity"><i class="fa fa-caret-down"></i> Parity</label>
+    <select id="node-config-input-parity">
+      </select>
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-bufferSize"><i class="fa fa-truck"></i> Buffer Size</label>
+    <input type="number" id="node-config-input-bufferSize" style="width:auto;">
+  </div>
+  <table style="width:100%">
+    <tbody style="vertical-align:top;">
+      <tr>
+        <td>
+          <div class="form-row">
+            <h6>Flow Control</h6>
+            <input type="checkbox" id="node-config-input-rtscts" style="display: inline-block; width: auto; vertical-align: top;">
+            <label for="node-config-input-rtscts"> RTS/CTS</label>
+          </div>
+          <div class="form-row">
+            <input type="checkbox" id="node-config-input-xon" style="display: inline-block; width: auto; vertical-align: top;">
+            <label><i for="node-config-input-xon"></i> XON</label>
+          </div>
+          <div class="form-row">
+            <input type="checkbox" id="node-config-input-xoff" style="display: inline-block; width: auto; vertical-align: top;">
+            <label><i for="node-config-input-xoff"></i> XOFF</label>
+          </div>
+          <div class="form-row">
+            <input type="checkbox" id="node-config-input-xany" style="display: inline-block; width: auto; vertical-align: top;">
+            <label><i for="node-config-input-xany"></i> XANY</label>
+          </div>
+        </td>
+        <td>
+          <div class="form-row">
+            <h6>Platform Options</h6>
+            <label for="node-config-input-vmin" style="width: 50px;"> vmin</label>
+            <input type="number" id="node-config-input-vmin" style="width: auto;">
+          </div>
+          <div class="form-row">
+            <label for="node-config-input-vtime" style="width: 50px;"> vtime</label>
+            <input type="number" id="node-config-input-vtime" style="width: auto;">
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </script>
