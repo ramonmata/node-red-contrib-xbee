@@ -17,7 +17,7 @@
   ],
   "node-red": {
     "nodes": {
-      "xbee": "lib/xbee.js"
+      "xbee": "lib/xbee-red.js"
     }
   },
   "author": "Ramón Mata <ramon@mata.com.mx> (http://ramon.mata.com.mx)",
