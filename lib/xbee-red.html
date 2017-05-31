@@ -1,4 +1,20 @@
 <script type="text/javascript">
+  RED.nodes.registerType('xbee-rx', {
+    category: 'iot',
+    color: '#3FADB5',
+    defaults: {
+      name: { value: '' },
+      xBee: { value: '', type: 'xbee-config' }
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: 'xbee.png',
+    label: function () {
+      return this.name || 'XBee RX';
+    },
+    paletteLabel: 'XBee RX'
+  });
+
   RED.nodes.registerType('xbee-tx', {
     category: 'iot',
     color: '#3FADB5',
@@ -14,22 +30,6 @@
       return this.name || 'XBee TX';
     },
     paletteLabel: 'XBee TX'
-  });
-
-  RED.nodes.registerType('xbee-rx', {
-    category: 'iot',
-    color: '#3FADB5',
-    defaults: {
-      name: { value: '' },
-      xBee: { value: '', type: 'xbee-config' }
-    },
-    inputs: 0,
-    outputs: 1,
-    icon: 'xbee.png',
-    label: function () {
-      return this.name || 'XBee RX';
-    },
-    paletteLabel: 'XBee RX'
   });
 
   RED.nodes.registerType('xbee-config', {
@@ -98,6 +98,39 @@
   });
 </script>
 
+<script type="text/x-red" data-template-name="xbee-rx">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name TX</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+    <label for="node-input-xBee"><i class="fa fa-cog"></i> XBee</label>
+    <input type="text" id="node-input-xBee" placeholder="Serial Port">
+  </div>
+</script>
+
+<script type="text/x-red" data-help-name="xbee-rx">
+  <p>XBee Node is intended to Continuously Receive Data</p>
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>Standard output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">JSON object</span></dt>
+        <dd>JSON Object containing the data frame received by XBee</dd>
+      </dl>
+    </li>
+  </ol>
+  <h3>Details</h3>
+  <p>Once properly configured, this node will "listen" for incomming data frames, 
+    data is parsed with serialport/xbee-api parser and each data frame is delivered in the output node <code>msg.payload</code> message.
+  </p>
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> - The xbee-api Node.js module</li>
+    <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
+  </ul>
+</script>
+
 <script type="text/x-red" data-template-name="xbee-tx">
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -145,39 +178,6 @@
       <li><a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> - The xbee-api Node.js module</li>
       <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
     </ul>
-</script>
-
-<script type="text/x-red" data-template-name="xbee-rx">
-  <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name TX</label>
-    <input type="text" id="node-input-name" placeholder="Name">
-  </div>
-  <div class="form-row">
-    <label for="node-input-xBee"><i class="fa fa-cog"></i> XBee</label>
-    <input type="text" id="node-input-xBee" placeholder="Serial Port">
-  </div>
-</script>
-
-<script type="text/x-red" data-help-name="xbee-rx">
-  <p>XBee Node is intended to Continuously Receive Data</p>
-  <h3>Outputs</h3>
-  <ol class="node-ports">
-    <li>Standard output
-      <dl class="message-properties">
-        <dt>payload <span class="property-type">JSON object</span></dt>
-        <dd>JSON Object containing the data frame received by XBee</dd>
-      </dl>
-    </li>
-  </ol>
-  <h3>Details</h3>
-  <p>Once properly configured, this node will "listen" for incomming data frames, 
-    data is parsed with serialport/xbee-api parser and each data frame is delivered in the output node <code>msg.payload</code> message.
-  </p>
-  <h3>References</h3>
-  <ul>
-    <li><a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> - The xbee-api Node.js module</li>
-    <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
-  </ul>
 </script>
 
 <script type="text/x-red" data-template-name="xbee-config">
