@@ -4,12 +4,13 @@
   "description": "Node-RED module for the Xbee radio modules",
   "main": "index.js",
   "scripts": {
-    "node-red-start": "node node_modules/node-red/red.js --userDir .node-red",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prestart": "bash ./init.sh",
+    "start": "node node_modules/node-red/red.js --userDir .node-red",
+    "test": "node node_modules/jshint/bin/jshint ./lib/xbee.js ./lib/xbeepool.js ./lib/xbee.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ramonmata/node-red-contrib-xbee.git"
+    "url": "https://github.com/ramonmata/node-red-contrib-xbee.git"
   },
   "keywords": [
     "node-red",
@@ -31,6 +32,7 @@
     "xbee-api": "^0.5.2"
   },
   "devDependencies": {
+    "jshint": "^2.9.4",
     "node-red": "^0.16.2"
   }
 }
