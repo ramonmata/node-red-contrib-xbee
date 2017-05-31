@@ -110,7 +110,41 @@
 </script>
 
 <script type="text/x-red" data-help-name="xbee-tx">
-  <p>XBee Node is intended to Transmit Data </p>
+  <p>XBee Node is intended to Transmit Data</p>
+  <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload
+            <span class="property-type">JSON Object</span>
+        </dt>
+        <dd>it expects a JSON Object in payload with the contents of the data frame to build</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>Once properly configured, this node will be ready to build and send data frames,
+      as they are received in the input node <code>msg.payload</code>
+    </p>
+    <p>Make sure to review the <a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a>
+    documentation in order to build the correct data frame
+    </p>
+    <h4>Example</h4>
+    <p>
+      To send a <i>0x10: ZigBee Transmit Request</i>, then build the following JSON object and copy it to the <code>msg.payload</code> which this node can use to build and deliver the message
+      <pre>
+        var myDataFrame = {
+            type: 0x10,
+            id: 0x01,
+            destination64: "0013a200400a0127",
+            destination16: "fffe",
+            broadcastRadius: 0x00,
+            options: 0x00,
+            data: "Hello from Node-RED!"
+        };
+      </pre>
+    </p>
+    <h3>References</h3>
+    <ul>
+      <li><a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> - The xbee-api Node.js module</li>
+      <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
+    </ul>
 </script>
 
 <script type="text/x-red" data-template-name="xbee-rx">
@@ -125,7 +159,25 @@
 </script>
 
 <script type="text/x-red" data-help-name="xbee-rx">
-  <p>XBee Node is intended to Continuously Receive Data </p>
+  <p>XBee Node is intended to Continuously Receive Data</p>
+  <h3>Outputs</h3>
+  <ol class="node-ports">
+    <li>Standard output
+      <dl class="message-properties">
+        <dt>payload <span class="property-type">JSON object</span></dt>
+        <dd>JSON Object containing the data frame received by XBee</dd>
+      </dl>
+    </li>
+  </ol>
+  <h3>Details</h3>
+  <p>Once properly configured, this node will "listen" for incomming data frames, 
+    data is parsed with serialport/xbee-api parser and each data frame is delivered in the output node <code>msg.payload</code> message.
+  </p>
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> - The xbee-api Node.js module</li>
+    <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
+  </ul>
 </script>
 
 <script type="text/x-red" data-template-name="xbee-config">
@@ -218,4 +270,18 @@
       </tr>
     </tbody>
   </table>
+</script>
+
+<script type="text/x-red" data-help-name="xbee-config">
+  <p>XBee configuration node, to be used by XBee nodes</p>
+  <h3>Details</h3>
+  <p>Except from the Serial Port, all other properties are configured with default values as indicated in 
+    <a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> and 
+    <a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> libraries.
+  </p>
+  <h3>References</h3>
+  <ul>
+    <li><a href="https://github.com/jankolkmeier/xbee-api">xbee-api</a> - The xbee-api Node.js module</li>
+    <li><a href="https://github.com/EmergingTechnologyAdvisors/node-serialport">SerialPort</a> - Node.js package to access serial ports for reading and writing</li>
+  </ul>
 </script>
