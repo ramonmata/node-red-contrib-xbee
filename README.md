@@ -55,5 +55,6 @@ var myDataFrame = {
 
 - [xbee-api](https://github.com/jankolkmeier/xbee-api) The xbee-api Node.js module
 - [serialport](https://github.com/EmergingTechnologyAdvisors/node-serialport) Node.js package to access serial ports for reading and writing
+- [lavirott](https://github.com/lavirott) For updating code to use the the latest serialport and xbee-api libraries
 
 ### :)
