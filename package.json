@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "serialport": "^7.1.0",
+    "serialport": "^9.2.8",
     "xbee-api": "^0.6.0"
   }
 }
